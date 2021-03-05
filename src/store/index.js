@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
@@ -22,6 +22,10 @@ export default new Vuex.Store({
         done: false,
       },
     ],
+    snackbar: {
+      show: false,
+      text: "",
+    },
   },
   mutations: {
     addTask(state, newTaskTitle) {
@@ -39,9 +43,30 @@ export default new Vuex.Store({
     deleteTask(state, id) {
       state.tasks = state.tasks.filter((task) => task.id !== id);
     },
+    showSnackbar(state, text) {
+      let timeout = 0
+      if (state.snackbar.show) {
+        state.snackbar.show = false;
+        timeout = 300
+      }
+      setTimeout(() => {
+        state.snackbar.show = true;
+        state.snackbar.text = text;
+      }, timeout);
+    },
+    hideSnackbar(state) {
+      state.snackbar.show = false
+    }
   },
   actions: {
+    addTask({ commit }, newTaskTitle) {
+      commit("addTask", newTaskTitle);
+      commit("showSnackbar", "Tarefa adicionada com sucesso!");
+    },
+    deleteTask({ commit }, id) {
+      commit("deleteTask", id);
+      commit("showSnackbar", "Tarefa removida com sucesso!");
+    },
   },
-  getters: {
-  }
-})
+  getters: {},
+});
