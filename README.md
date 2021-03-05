@@ -1,19 +1,5 @@
-# todo
+# Vuetify Todo
 
-## Project setup
-```
-yarn install
-```
+### Descrição
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Projeto de uma lista de tarefas desenvolvido com VueJs e Vuetify.
