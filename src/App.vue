@@ -27,7 +27,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app color="primary" dark src="tatry.jpg" prominent>
+    <v-app-bar app color="primary" dark src="tatry.jpg" prominent height="150">
       <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
@@ -42,7 +42,10 @@
           <search />
         </v-row>
         <v-row>
-          <v-toolbar-title class="ml-4">Vuetify Todo</v-toolbar-title>
+          <v-toolbar-title class="ml-4 text-h4">Vuetify Todo</v-toolbar-title>
+        </v-row>
+        <v-row>
+          <live-date-time />
         </v-row>
       </v-container>
     </v-app-bar>
@@ -55,11 +58,13 @@
 </template>
 
 <script>
+import LiveDateTime from "./components/Tools/LiveDateTime";
 import Search from "./components/Tools/Search";
 import SnackBar from "./components/Shared/SnackBar";
 
 export default {
   components: {
+    LiveDateTime,
     Search,
     SnackBar,
   },
