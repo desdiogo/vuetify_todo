@@ -1,10 +1,5 @@
 <template>
   <div>
-    <dialog-delete
-      v-if="dialogs.delete"
-      :task="task"
-      @close="dialogs.delete = false"
-    />
     <v-menu bottom left>
       <template v-slot:activator="{ on, attrs }">
         <v-btn color="primary" icon v-bind="attrs" v-on="on">
@@ -25,27 +20,41 @@
         </v-list-item>
       </v-list>
     </v-menu>
+    <dialog-delete
+      v-if="dialogs.delete"
+      :task="task"
+      @close="dialogs.delete = false"
+    />
+
+    <dialog-edit
+      v-if="dialogs.edit"
+      :task="task"
+      @close="dialogs.edit = false"
+    />
   </div>
 </template>
 
 <script>
 import DialogDelete from "../Dialogs/DialogDelete";
+import DialogEdit from "../Dialogs/DialogEdit";
 
 export default {
   components: {
     DialogDelete,
+    DialogEdit,
   },
   props: ["task"],
   data: () => ({
     dialogs: {
       delete: false,
+      edit: false,
     },
     items: [
       {
         title: "Editar",
         icon: "mdi-pencil",
         click() {
-          console.log("editar");
+          this.dialogs.edit = true
         },
       },
       {
@@ -66,7 +75,7 @@ export default {
   }),
   methods: {
     handleClick(index) {
-      this.items[index].click.call(this)
+      this.items[index].click.call(this);
     },
   },
 };

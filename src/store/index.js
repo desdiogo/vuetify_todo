@@ -43,6 +43,10 @@ export default new Vuex.Store({
     deleteTask(state, id) {
       state.tasks = state.tasks.filter((task) => task.id !== id);
     },
+    updateTaskTitle(state, payload) {
+      let task = state.tasks.filter((task) => task.id === payload.id)[0];
+      task.title = payload.title
+    },
     showSnackbar(state, text) {
       let timeout = 0
       if (state.snackbar.show) {
@@ -66,6 +70,10 @@ export default new Vuex.Store({
     deleteTask({ commit }, id) {
       commit("deleteTask", id);
       commit("showSnackbar", "Tarefa removida com sucesso!");
+    },
+    updateTaskTitle({ commit }, payload) {
+      commit("updateTaskTitle", payload);
+      commit("showSnackbar", "Tarefa editada com sucesso!");
     },
   },
   getters: {},
