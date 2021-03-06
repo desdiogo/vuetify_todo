@@ -1,5 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import Localbase from "localbase";
+
+let db = new Localbase("db");
+db.config.debug = false
 
 Vue.use(Vuex);
 
@@ -8,26 +12,7 @@ export default new Vuex.Store({
     sorting: false,
     appTitle: process.env.VUE_APP_TITLE,
     search: null,
-    tasks: [
-      {
-        id: 1,
-        title: "Acordar",
-        done: false,
-        dueDate: "2021-03-05",
-      },
-      {
-        id: 2,
-        title: "Comer Bananas",
-        done: false,
-        dueDate: "2020-04-05",
-      },
-      {
-        id: 3,
-        title: "Comprar Bananas",
-        done: false,
-        dueDate: "2020-07-20",
-      },
-    ],
+    tasks: [],
     snackbar: {
       show: false,
       text: "",
@@ -37,13 +22,7 @@ export default new Vuex.Store({
     setSearch(state, value) {
       state.search = value;
     },
-    addTask(state, newTaskTitle) {
-      let newTask = {
-        id: Date.now(),
-        title: newTaskTitle,
-        done: false,
-        duDate: null,
-      };
+    addTask(state, newTask) {
       state.tasks.push(newTask);
     },
     doneTask(state, id) {
@@ -62,7 +41,7 @@ export default new Vuex.Store({
       task.dueDate = payload.dueDate;
     },
     setTasks(state, tasks) {
-      state.tasks = tasks
+      state.tasks = tasks;
     },
     showSnackbar(state, text) {
       let timeout = 0;
@@ -79,25 +58,72 @@ export default new Vuex.Store({
       state.snackbar.show = false;
     },
     toggleSorting(state) {
-      state.sorting = !state.sorting
-    }
+      state.sorting = !state.sorting;
+    },
   },
   actions: {
     addTask({ commit }, newTaskTitle) {
-      commit("addTask", newTaskTitle);
-      commit("showSnackbar", "Tarefa adicionada com sucesso.");
+      let newTask = {
+        id: Date.now(),
+        title: newTaskTitle,
+        done: false,
+        dueDate: null,
+      };
+      db.collection("tasks")
+        .add(newTask)
+        .then(() => {
+          commit("addTask", newTask);
+          commit("showSnackbar", "Tarefa adicionada com sucesso.");
+        });
+    },
+    doneTask({ state, commit }, id) {
+      let task = state.tasks.filter((task) => task.id === id)[0];
+      db.collection("tasks")
+        .doc({ id: id })
+        .update({
+          done: !task.done,
+        })
+        .then(() => {
+          commit("doneTask", id);
+        });
     },
     deleteTask({ commit }, id) {
-      commit("deleteTask", id);
-      commit("showSnackbar", "Tarefa removida com sucesso.");
+      db.collection("tasks")
+        .doc({ id: id })
+        .delete()
+        .then(() => {
+          commit("deleteTask", id);
+          commit("showSnackbar", "Tarefa removida com sucesso.");
+        });
     },
     updateTaskTitle({ commit }, payload) {
-      commit("updateTaskTitle", payload);
-      commit("showSnackbar", "Tarefa editada com sucesso.");
+      db.collection("tasks")
+        .doc({ id: payload.id })
+        .update({ title: payload.title })
+        .then(() => {
+          commit("updateTaskTitle", payload);
+          commit("showSnackbar", "Tarefa editada com sucesso.");
+        });
     },
     updateTaskDueDate({ commit }, payload) {
-      commit("updateTaskDueDate", payload);
-      commit("showSnackbar", "Data atualizada com sucesso.");
+      db.collection("tasks")
+        .doc({ id: payload.id })
+        .update({ dueDate: payload.dueDate })
+        .then(() => {
+          commit("updateTaskDueDate", payload);
+          commit("showSnackbar", "Data atualizada com sucesso.");
+        });
+    },
+    getTasks({ commit }) {
+      db.collection("tasks")
+        .get()
+        .then((tasks) => {
+          commit("setTasks", tasks);
+        });
+    },
+    setTasks({ commit }, tasks) {
+      db.collection("tasks").set(tasks);
+      commit("setTasks", tasks);
     },
   },
   getters: {
@@ -105,7 +131,9 @@ export default new Vuex.Store({
       if (!state.search) {
         return state.tasks;
       }
-      return state.tasks.filter((task) => task.title.toLowerCase().includes(state.search.toLowerCase()));
+      return state.tasks.filter((task) =>
+        task.title.toLowerCase().includes(state.search.toLowerCase())
+      );
     },
   },
 });

@@ -67,7 +67,7 @@ export default {
         },
       },
       {
-        title: "Data tarefa",
+        title: "Data",
         icon: "mdi-calendar",
         click() {
           this.dialogs.dueDate = true;

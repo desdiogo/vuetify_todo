@@ -70,6 +70,9 @@ export default {
     Search,
     SnackBar,
   },
+  mounted() {
+    this.$store.dispatch("getTasks")
+  },
   data: () => ({
     drawer: null,
     items: [
