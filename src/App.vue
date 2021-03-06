@@ -3,7 +3,7 @@
     <v-navigation-drawer v-model="drawer" :mobile-breakpoint="768" app>
       <v-img
         class="pa-4 pt-7"
-        height="170"
+        :height="$route.path === '/' ? 238 : 170"
         src="tatry.jpg"
         gradient="to top right, rgba(19,84,122,.5), rgba(128,208,199,.8)"
       >
@@ -29,11 +29,11 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app color="primary" dark src="tatry.jpg" prominent height="170">
+    <v-app-bar app color="primary" dark src="tatry.jpg" prominent :height="$route.path === '/' ? 238 : 170">
       <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
-          gradient="to top right, rgba(19,84,122,.5), rgba(128,208,199,.8)"
+          gradient="to top right, rgba(19,84,122,.9), rgba(128,208,199,.9)"
         ></v-img>
       </template>
 
@@ -49,6 +49,9 @@
         <v-row>
           <live-date-time />
         </v-row>
+        <v-row v-if="$route.path === '/'">
+          <field-add-task />
+        </v-row>
       </v-container>
     </v-app-bar>
 
@@ -63,12 +66,14 @@
 import LiveDateTime from "./components/Tools/LiveDateTime";
 import Search from "./components/Tools/Search";
 import SnackBar from "./components/Shared/SnackBar";
+import FieldAddTask from './components/Todo/FieldAddTask.vue';
 
 export default {
   components: {
     LiveDateTime,
     Search,
     SnackBar,
+    FieldAddTask,
   },
   mounted() {
     this.$store.dispatch("getTasks")
