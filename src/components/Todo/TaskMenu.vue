@@ -70,7 +70,7 @@ export default {
         title: "Data tarefa",
         icon: "mdi-calendar",
         click() {
-          this.dialogs.dueDate = true
+          this.dialogs.dueDate = true;
         },
       },
       {
@@ -78,6 +78,13 @@ export default {
         icon: "mdi-delete",
         click() {
           this.dialogs.delete = true;
+        },
+      },
+      {
+        title: "Organizar",
+        icon: "mdi-drag-horizontal-variant",
+        click() {
+          this.$store.commit("toggleSorting");
         },
       },
     ],
