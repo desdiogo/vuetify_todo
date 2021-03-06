@@ -1,9 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-    >
+    <v-navigation-drawer v-model="drawer" app>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title">
@@ -17,16 +14,8 @@
 
       <v-divider></v-divider>
 
-      <v-list
-        dense
-        nav
-      >
-        <v-list-item
-          v-for="item in items"
-          :key="item.title"
-          :to="item.to"
-          link
-        >
+      <v-list dense nav>
+        <v-list-item v-for="item in items" :key="item.title" :to="item.to" link>
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -38,13 +27,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar
-      app
-      color="primary"
-      dark
-      src="tatry.jpg"
-      prominent
-    >
+    <v-app-bar app color="primary" dark src="tatry.jpg" prominent>
       <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
@@ -52,23 +35,16 @@
         ></v-img>
       </template>
 
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
-      <v-toolbar-title>Vuetify Todo</v-toolbar-title>
-
-      <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
+      <v-container class="pa-0">
+        <v-row>
+          <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+          <v-spacer></v-spacer>
+          <search />
+        </v-row>
+        <v-row>
+          <v-toolbar-title class="ml-4">Vuetify Todo</v-toolbar-title>
+        </v-row>
+      </v-container>
     </v-app-bar>
 
     <v-main>
@@ -79,18 +55,20 @@
 </template>
 
 <script>
-import SnackBar from "./components/Shared/SnackBar"
+import Search from "./components/Tools/Search";
+import SnackBar from "./components/Shared/SnackBar";
 
-  export default {
-    components: {
-      SnackBar
-    },
-    data: () => ({
-      drawer: null,
-      items: [
-        { title: 'Todo', icon: 'mdi-format-list-checks', to: '/' },
-        { title: 'Sobre', icon: 'mdi-help-box', to: '/about' },
-      ],
-    }),
-  }
+export default {
+  components: {
+    Search,
+    SnackBar,
+  },
+  data: () => ({
+    drawer: null,
+    items: [
+      { title: "Todo", icon: "mdi-format-list-checks", to: "/" },
+      { title: "Sobre", icon: "mdi-help-box", to: "/about" },
+    ],
+  }),
+};
 </script>
